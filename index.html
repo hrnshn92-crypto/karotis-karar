@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Karotis Karar Aracı</title>
+<style type="text/css">
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #111827;
+  color: #f9fafb;
+  font-family: -apple-system, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header {
+  background-color: #1f2937;
+  padding: 16px 16px 12px 16px;
+  padding-top: calc(16px + env(safe-area-inset-top));
+  border-bottom: 1px solid #374151;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header h1 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #f9fafb;
+  margin: 0 0 3px 0;
+}
+
+.header p {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.prog-wrap {
+  height: 3px;
+  background-color: #374151;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 62px;
+  z-index: 99;
+}
+
+.prog-bar {
+  height: 3px;
+  background-color: #3b82f6;
+  width: 0%;
+  -webkit-transition: width 0.3s;
+  transition: width 0.3s;
+}
+
+.scroll-content {
+  padding: 16px 16px 120px 16px;
+}
+
+.sec {
+  margin-bottom: 22px;
+}
+
+.sec-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 9px;
+}
+
+.grid2 {
+  display: -webkit-flex;
+  display: flex;
+  gap: 8px;
+}
+
+.grid2 .opt {
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+.grid3 {
+  display: -webkit-flex;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.grid3 .opt {
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+.opt {
+  background-color: #1f2937;
+  border: 1.5px solid #374151;
+  border-radius: 10px;
+  padding: 11px 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  display: block;
+  width: 100%;
+  text-align: left;
+}
+
+.opt.selected {
+  border-color: #3b82f6;
+  background-color: #1e3a5f;
+}
+
+.opt-main {
+  font-size: 14px;
+  font-weight: 600;
+  color: #f9fafb;
+  display: block;
+}
+
+.opt.selected .opt-main {
+  color: #93c5fd;
+}
+
+.opt-sub {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 3px;
+  display: block;
+  line-height: 1.4;
+}
+
+.opt.selected .opt-sub {
+  color: #60a5fa;
+}
+
+.check-list {
+  background-color: #1f2937;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #374151;
+}
+
+.check-item {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 14px;
+  border-bottom: 1px solid #374151;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.check-item:last-child {
+  border-bottom: none;
+}
+
+.chk-box {
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 6px;
+  border: 1.5px solid #6b7280;
+  background-color: transparent;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+.chk-box.on {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
+}
+
+.chk-box .tick {
+  display: none;
+  width: 12px;
+  height: 7px;
+  border-left: 2.5px solid #fff;
+  border-bottom: 2.5px solid #fff;
+  -webkit-transform: rotate(-45deg) translateY(-1px);
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.chk-box.on .tick {
+  display: block;
+}
+
+.chk-label {
+  font-size: 13.5px;
+  color: #d1d5db;
+  line-height: 1.45;
+}
+
+.btn-fixed {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  background-color: #111827;
+  z-index: 200;
+  border-top: 1px solid #1f2937;
+}
+
+.btn-calc {
+  display: block;
+  width: 100%;
+  background-color: #3b82f6;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.btn-calc:active {
+  background-color: #2563eb;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #374151;
+  margin: 20px 0;
+}
+
+.result-box {
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 14px;
+  border: 1px solid #374151;
+}
+
+.result-box.danger  { background-color: #2d1515; border-color: #7f1d1d; }
+.result-box.warning { background-color: #2d2208; border-color: #78350f; }
+.result-box.info    { background-color: #0f1f3d; border-color: #1e3a8a; }
+.result-box.success { background-color: #0d2018; border-color: #14532d; }
+
+.result-icon { font-size: 28px; margin-bottom: 8px; }
+
+.result-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+
+.danger  .result-title { color: #fca5a5; }
+.warning .result-title { color: #fde68a; }
+.info    .result-title { color: #93c5fd; }
+.success .result-title { color: #86efac; }
+
+.result-body {
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: #9ca3af;
+}
+
+.result-body strong { color: #e5e7eb; font-weight: 600; }
+
+.badges {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 99px;
+  letter-spacing: 0.03em;
+}
+
+.b-red   { background-color: #450a0a; color: #fca5a5; }
+.b-amber { background-color: #431407; color: #fde68a; }
+.b-blue  { background-color: #0f2744; color: #93c5fd; }
+.b-green { background-color: #052e16; color: #86efac; }
+.b-gray  { background-color: #1f2937; color: #9ca3af; }
+
+.risk-panel {
+  background-color: #1f2937;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 14px;
+  border: 1px solid #374151;
+}
+
+.risk-panel-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 14px;
+}
+
+.risk-row {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.risk-row:last-child { margin-bottom: 0; }
+
+.risk-lbl {
+  font-size: 12px;
+  color: #9ca3af;
+  min-width: 120px;
+  max-width: 120px;
+}
+
+.risk-bar-bg {
+  -webkit-flex: 1;
+  flex: 1;
+  height: 7px;
+  background-color: #374151;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.risk-bar-fill {
+  height: 7px;
+  border-radius: 4px;
+}
+
+.risk-val {
+  font-size: 12px;
+  color: #6b7280;
+  min-width: 38px;
+  text-align: right;
+}
+
+.bullets {
+  margin: 10px 0 0 16px;
+  padding: 0;
+}
+
+.bullets li {
+  font-size: 13px;
+  color: #9ca3af;
+  line-height: 1.8;
+}
+
+.btn-reset {
+  display: block;
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid #374151;
+  color: #9ca3af;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  margin-bottom: 20px;
+}
+
+.btn-reset:active { background-color: #1f2937; }
+
+.disc {
+  font-size: 11px;
+  color: #6b7280;
+  background-color: #1f2937;
+  border-radius: 10px;
+  padding: 14px;
+  line-height: 1.65;
+  margin-bottom: 8px;
+}
+
+.toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  background-color: #dc2626;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 999;
+  opacity: 0;
+  -webkit-transition: opacity 0.25s;
+  transition: opacity 0.25s;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.toast.show { opacity: 1; }
+
+#resultArea { display: none; }
+#resultArea.show { display: block; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Karotis Darlığı Karar Aracı</h1>
+  <p>AHA/ASA 2021 · ESC 2023 · SVS kılavuzları</p>
+</div>
+<div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+
+<div class="toast" id="toast"></div>
+
+<div class="scroll-content">
+
+  <!-- 1 -->
+  <div class="sec">
+    <div class="sec-label">1 — Semptom Durumu</div>
+    <div class="grid2">
+      <div class="opt" onclick="pick(this,'symptom','symptomatic')">
+        <span class="opt-main">Semptomatik</span>
+        <span class="opt-sub">Son 6 ay içinde TİA veya inme</span>
+      </div>
+      <div class="opt" onclick="pick(this,'symptom','asymptomatic')">
+        <span class="opt-main">Asemptomatik</span>
+        <span class="opt-sub">Semptom yok veya &gt;6 ay önce</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="sec">
+    <div class="sec-label">2 — Darlık Derecesi (NASCET)</div>
+    <div class="grid3">
+      <div class="opt" onclick="pick(this,'stenosis','low')">
+        <span class="opt-main">%0–49</span>
+        <span class="opt-sub">Düşük</span>
+      </div>
+      <div class="opt" onclick="pick(this,'stenosis','moderate')">
+        <span class="opt-main">%50–69</span>
+        <span class="opt-sub">Orta</span>
+      </div>
+      <div class="opt" onclick="pick(this,'stenosis','high')">
+        <span class="opt-main">%70–99</span>
+        <span class="opt-sub">Yüksek</span>
+      </div>
+    </div>
+    <div class="opt" onclick="pick(this,'stenosis','occluded')" style="text-align:center;">
+      <span class="opt-main">Tam Oklüzyon</span>
+      <span class="opt-sub">Lümen tamamen tıkalı</span>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="sec">
+    <div class="sec-label">3 — Hasta Yaşı</div>
+    <div class="grid3">
+      <div class="opt" onclick="pick(this,'age','young')">
+        <span class="opt-main">&lt;70</span>
+        <span class="opt-sub">Genç</span>
+      </div>
+      <div class="opt" onclick="pick(this,'age','old')">
+        <span class="opt-main">70–79</span>
+        <span class="opt-sub">Yaşlı</span>
+      </div>
+      <div class="opt" onclick="pick(this,'age','vold')">
+        <span class="opt-main">≥80</span>
+        <span class="opt-sub">İleri yaş</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="sec">
+    <div class="sec-label">4 — Cerrahi Risk Profili</div>
+    <div class="grid2">
+      <div class="opt" onclick="pick(this,'risk','low')">
+        <span class="opt-main">Düşük Risk</span>
+        <span class="opt-sub">Standart anatomik uygunluk</span>
+      </div>
+      <div class="opt" onclick="pick(this,'risk','high')">
+        <span class="opt-main">Yüksek Risk</span>
+        <span class="opt-sub">Radyasyon, re-stenoz, KAH, erişim güçlüğü</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="sec">
+    <div class="sec-label">5 — Ek Risk Faktörleri</div>
+    <div class="check-list">
+      <div class="check-item" onclick="toggleChk('plaque')">
+        <div class="chk-box" id="c_plaque"><div class="tick"></div></div>
+        <div class="chk-label">İnstabil / ülsere plak</div>
+      </div>
+      <div class="check-item" onclick="toggleChk('embolic')">
+        <div class="chk-box" id="c_embolic"><div class="tick"></div></div>
+        <div class="chk-label">Erken rekürren embolik semptom</div>
+      </div>
+      <div class="check-item" onclick="toggleChk('hemodynamic')">
+        <div class="chk-box" id="c_hemodynamic"><div class="tick"></div></div>
+        <div class="chk-label">Hemodinamik instabilite</div>
+      </div>
+      <div class="check-item" onclick="toggleChk('contra')">
+        <div class="chk-box" id="c_contra"><div class="tick"></div></div>
+        <div class="chk-label">CEA kontraendikasyonu (trakeostomi, önceki boyun cerrahisi vb.)</div>
+      </div>
+      <div class="check-item" onclick="toggleChk('contralateral')">
+        <div class="chk-box" id="c_contralateral"><div class="tick"></div></div>
+        <div class="chk-label">Kontralateral oklüzyon</div>
+      </div>
+      <div class="check-item" onclick="toggleChk('afib')">
+        <div class="chk-box" id="c_afib"><div class="tick"></div></div>
+        <div class="chk-label">Atriyal fibrilasyon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="sec">
+    <div class="sec-label">6 — Medikal Tedavi Durumu</div>
+    <div class="grid2">
+      <div class="opt" onclick="pick(this,'medical','yes')">
+        <span class="opt-main">OMT Altında</span>
+        <span class="opt-sub">Statin + antiplatelet + risk faktörü kontrolü</span>
+      </div>
+      <div class="opt" onclick="pick(this,'medical','no')">
+        <span class="opt-main">Yetersiz/Uyumsuz</span>
+        <span class="opt-sub">Medikal tedavi eksik</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="resultArea">
+    <hr class="divider">
+    <div id="resultCard"></div>
+    <div id="riskPanel"></div>
+    <button class="btn-reset" onclick="resetAll()">↺  Yeniden Değerlendir</button>
+    <div class="disc">⚠️ Bu araç yalnızca klinik karar verme sürecini desteklemeye yöneliktir. Kesin tedavi kararı deneyimli damar cerrahı ve nöroloji konsültasyonu ile alınmalıdır. AHA/ASA 2021, ESC 2023 ve SVS kılavuzları esas alınmıştır.</div>
+  </div>
+
+</div>
+
+<div class="btn-fixed">
+  <button class="btn-calc" onclick="hesapla()">Değerlendirmeyi Hesapla →</button>
+</div>
+
+<script type="text/javascript">
+var st = {symptom:null,stenosis:null,age:null,risk:null,medical:null};
+var chk = {plaque:false,embolic:false,hemodynamic:false,contra:false,contralateral:false,afib:false};
+
+function pick(el, key, val) {
+  var all = document.querySelectorAll('[onclick*="pick(this,\'' + key + '\'"]');
+  for (var i = 0; i < all.length; i++) all[i].classList.remove('selected');
+  el.classList.add('selected');
+  st[key] = val;
+  updateProg();
+}
+
+function toggleChk(key) {
+  chk[key] = !chk[key];
+  var el = document.getElementById('c_' + key);
+  if (chk[key]) el.classList.add('on'); else el.classList.remove('on');
+}
+
+function updateProg() {
+  var keys = ['symptom','stenosis','age','risk'];
+  var n = 0;
+  for (var i = 0; i < keys.length; i++) if (st[keys[i]]) n++;
+  document.getElementById('progBar').style.width = (n / keys.length * 100) + '%';
+}
+
+function toast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
+function bar(lbl, pct, color, val) {
+  return '<div class="risk-row">' +
+    '<div class="risk-lbl">' + lbl + '</div>' +
+    '<div class="risk-bar-bg"><div class="risk-bar-fill" style="width:' + pct + '%;background-color:' + color + ';"></div></div>' +
+    '<div class="risk-val">' + val + '</div>' +
+    '</div>';
+}
+
+function hesapla() {
+  if (!st.symptom || !st.stenosis || !st.age || !st.risk) {
+    toast('Lütfen tüm zorunlu alanları doldurun');
+    return;
+  }
+
+  var sym = st.symptom === 'symptomatic';
+  var s   = st.stenosis;
+  var highRisk = st.risk === 'high';
+  var vold = st.age === 'vold';
+  var contra = chk.contra;
+  var urgent = chk.plaque || chk.embolic || chk.hemodynamic;
+  var afib = chk.afib;
+  var cl = chk.contralateral;
+
+  var rec = {};
+
+  if (s === 'occluded') {
+    rec = {type:'warning', icon:'🚫', title:'Tam oklüzyon — revaskülizasyon endike değil',
+      body:'Tam oklüzyon varlığında cerrahi veya stent girişimi önerilmez. <strong>Optimal medikal tedaviye (OMT)</strong> devam edilmeli; ikincil inme profilaksisi için antiplatelet/antikoagülan ve yaşam tarzı değişiklikleri sürdürülmelidir.',
+      badges:[{t:'OMT',c:'b-blue'},{t:'Girişim endike değil',c:'b-gray'}],
+      c:0, ca:0, om: sym?15:1};
+  } else if (s === 'low') {
+    rec = {type:'success', icon:'✅', title:'%0–49 darlık — medikal tedavi yeterli',
+      body:'Revaskülarizasyonun kanıtlanmış faydası yoktur. <strong>Optimal medikal tedavi</strong>: yüksek doz statin, antiplatelet, kan basıncı ve diyabet kontrolü, sigara bırakma. Yıllık Doppler takibi.',
+      badges:[{t:'OMT',c:'b-blue'},{t:'Girişim endike değil',c:'b-green'}],
+      c:0, ca:0, om: sym?15:0.5};
+  } else if (sym && s === 'high') {
+    if (!highRisk && !vold && !contra) {
+      var extra = '';
+      if (cl) extra += '<br><br>⚠️ Kontralateral oklüzyon CEA\'da teknik güçlük yaratabilir; CAS da değerlendirilebilir.';
+      if (urgent) extra += '<br><br>⚠️ Acil özellikler mevcut — erken girişim planlanmalı.';
+      if (afib) extra += '<br><br>💊 AF varlığında antikoagülan planlaması yapılmalı.';
+      rec = {type:'danger', icon:'⚡', title:'Semptomatik %70–99 — CEA öncelikli önerilir',
+        body:'Yüksek dereceli semptomatik darlıkta <strong>karotis endarterektomi (CEA)</strong> altın standarttır (NASCET, ECST). Semptomdan itibaren <strong>14 gün içinde</strong> yapılması önerilir. Periprosedürel risk &lt;%6 olan merkezlerde tercih edilmeli.' + extra,
+        badges:[{t:'CEA — 1. seçenek',c:'b-red'},{t:'14 gün içinde',c:'b-amber'},{t:'OMT sürdür',c:'b-blue'}],
+        c:6, ca:8, om:15};
+    } else {
+      var afibNote = afib ? '<br><br>💊 AF varlığında antikoagülan tedavi planlanmalıdır.' : '';
+      rec = {type:'info', icon:'🔵', title:'Semptomatik %70–99 — CAS değerlendirilebilir',
+        body:'Yüksek cerrahi risk, anatomik güçlük veya ≥80 yaş varlığında <strong>karotis arter stentlemesi (CAS)</strong> uygun alternatiftir. Yüksek hacimli deneyimli merkezlerde, <strong>distal emboli koruması (DEP)</strong> ile yapılmalıdır.' + afibNote,
+        badges:[{t:'CAS — 1. seçenek',c:'b-blue'},{t:'DEP kullan',c:'b-gray'},{t:'OMT sürdür',c:'b-blue'}],
+        c:6, ca:8, om:15};
+    }
+  } else if (sym && s === 'moderate') {
+    if (!highRisk && !vold && !contra) {
+      rec = {type:'warning', icon:'⚠️', title:'Semptomatik %50–69 — seçilmiş hastalarda CEA',
+        body:'CEA faydası daha sınırlıdır. <strong>Genç erkek hastalar</strong> (&lt;75 yaş), yakın dönem semptomlar, instabil plak veya rekürren embolik olaylar varlığında CEA değerlendirilebilir. Yaşlı ve kadın hastalarda OMT çoğunlukla yeterlidir. <strong>Multidisipliner karar</strong> gerektirir.',
+        badges:[{t:'Seçilmiş CEA',c:'b-amber'},{t:'OMT',c:'b-blue'},{t:'MDT kararı',c:'b-gray'}],
+        c:6, ca:8, om:10};
+    } else {
+      rec = {type:'success', icon:'💊', title:'Semptomatik %50–69, yüksek risk — OMT',
+        body:'Yüksek cerrahi risk veya ileri yaşta <strong>optimal medikal tedavi</strong> standarttır. CAS seçilmiş vakalarda uzman merkez kararıyla değerlendirilebilir.',
+        badges:[{t:'OMT',c:'b-blue'},{t:'CAS seçilmiş vaka',c:'b-gray'}],
+        c:6, ca:8, om:10};
+    }
+  } else if (!sym && s === 'high') {
+    if (!highRisk && !vold && !contra) {
+      rec = {type:'info', icon:'🔷', title:'Asemptomatik %70–99 — seçilmiş vakada girişim',
+        body:'OMT altında yıllık inme riski &lt;%1\'e gerilemiştir; rutin girişim kısıtlıdır. Aşağıdaki özelliklerin varlığında CEA veya CAS multidisipliner değerlendirmeyle düşünülebilir:',
+        bullets:['Beklenen yaşam süresi ≥5 yıl, iyi klinik durum','İnstabil / ülsere plak','Serebral otoregülasyon bozukluğu','Kontralateral TIA / inme öyküsü','Periprosedürel risk &lt;%3 olan deneyimli merkez'],
+        badges:[{t:'OMT birincil',c:'b-blue'},{t:'Seçilmiş CEA/CAS',c:'b-gray'},{t:'MDT kararı',c:'b-amber'}],
+        c:3, ca:4, om:1};
+    } else {
+      rec = {type:'success', icon:'💊', title:'Asemptomatik %70–99, yüksek risk — OMT',
+        body:'Yüksek cerrahi risk veya ≥80 yaşta <strong>optimal medikal tedavi</strong> standart yaklaşımdır. Girişim riski faydayı aşar. 6–12 aylık Doppler izlem önerilir.',
+        badges:[{t:'OMT',c:'b-blue'},{t:'Yıllık izlem',c:'b-green'}],
+        c:3, ca:4, om:1};
+    }
+  } else if (!sym && s === 'moderate') {
+    rec = {type:'success', icon:'✅', title:'Asemptomatik %50–69 — medikal tedavi',
+      body:'Rutin girişim endikasyonu yoktur. <strong>Yüksek doz statin, antiplatelet, kan basıncı ve diyabet kontrolü</strong> ile OMT sürdürülmeli. Yıllık Doppler takibi önerilir.',
+      badges:[{t:'OMT',c:'b-blue'},{t:'Yıllık Doppler',c:'b-green'}],
+      c:3, ca:4, om:0.5};
+  }
+
+  if (!rec.type) { toast('Değerlendirme tamamlanamadı'); return; }
+
+  var bdg = rec.badges.map(function(b){ return '<span class="badge ' + b.c + '">' + b.t + '</span>'; }).join('');
+  var bul = rec.bullets ? '<ul class="bullets">' + rec.bullets.map(function(b){ return '<li>' + b + '</li>'; }).join('') + '</ul>' : '';
+
+  document.getElementById('resultCard').innerHTML =
+    '<div class="result-box ' + rec.type + '">' +
+    '<div class="result-icon">' + rec.icon + '</div>' +
+    '<div class="badges">' + bdg + '</div>' +
+    '<div class="result-title">' + rec.title + '</div>' +
+    '<div class="result-body">' + rec.body + bul + '</div>' +
+    '</div>';
+
+  if (rec.c > 0) {
+    document.getElementById('riskPanel').innerHTML =
+      '<div class="risk-panel">' +
+      '<div class="risk-panel-title">Periprosedürel risk karşılaştırması</div>' +
+      bar('CEA inme/ölüm', Math.min(rec.c*9,100), '#f87171', '&lt;%'+rec.c) +
+      bar('CAS inme/ölüm', Math.min(rec.ca*9,100), '#fbbf24', '&lt;%'+rec.ca) +
+      bar('OMT yıllık risk', Math.min(rec.om*6,100), '#3b82f6', '%~'+rec.om) +
+      '</div>';
+  } else {
+    document.getElementById('riskPanel').innerHTML = '';
+  }
+
+  var ra = document.getElementById('resultArea');
+  ra.classList.add('show');
+  setTimeout(function(){ ra.scrollIntoView({behavior:'smooth',block:'start'}); }, 80);
+}
+
+function resetAll() {
+  var keys = Object.keys(st);
+  for (var i=0; i<keys.length; i++) st[keys[i]] = null;
+  var ckeys = Object.keys(chk);
+  for (var i=0; i<ckeys.length; i++) chk[ckeys[i]] = false;
+  document.querySelectorAll('.opt.selected').forEach(function(e){ e.classList.remove('selected'); });
+  document.querySelectorAll('.chk-box.on').forEach(function(e){ e.classList.remove('on'); });
+  document.getElementById('resultArea').classList.remove('show');
+  document.getElementById('progBar').style.width = '0%';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
